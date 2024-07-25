@@ -1,5 +1,6 @@
 from abc import ABC,abstractmethod
 import csv
+import sqlite3
 
 class Models(ABC):
    
@@ -148,3 +149,36 @@ class DAO_CSV_Genero(DAO_CSV):
 
 class DAO_CSV_Copia(DAO_CSV):
    model=Copia
+
+class DAO_SQLite(DAO): 
+   model=None
+   table=None
+   def __init__(self,path):
+      self.path=path
+      
+   def all(self):
+      connect=sqlite3.connect(self.path)
+      cursor=connect.cursor()
+      cursor.execute(f"select * from {self.table} ")
+      nombres=list(map(lambda item:item[0],cursor.description))
+      lista=self.__create_dict_from_sql(cursor.fetchall(),nombres)
+      connect.close()
+      return lista  
+         
+   def __create_dict_from_sql(self,filas,nombres):
+    registros=[]
+    for fila in filas:
+       registro={}
+       pos=0
+       for nombre in nombres:
+           registro[nombre]=fila[pos]
+           pos+=1
+       registros.append(self.model.create_from_dict(registro))
+    
+      
+    return registros
+     
+class DAO_SQLite_Director(DAO_SQLite):
+   model=Director
+   table="directores"
+   pass

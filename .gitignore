@@ -3,3 +3,5 @@ venv/
 pruebas.py
 escribir_csv.py
 .vscode/
+data/peliculas.sqlite
+app/leersqlite.py

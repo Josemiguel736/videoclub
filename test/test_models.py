@@ -1,4 +1,4 @@
-from app.models import Director,DAO_CSV_Director,Pelicula,DAO_CSV_Pelicula,Genero,DAO_CSV_Genero,Copia,DAO_CSV_Copia
+from app.models import Director,DAO_CSV_Director,Pelicula,DAO_CSV_Pelicula,Genero,DAO_CSV_Genero,Copia,DAO_CSV_Copia,DAO_SQLite_Director
 
 def test_create_dicrector():
     director=Director("Robert Redford")
@@ -70,3 +70,9 @@ def test_copias_catch_all():
     copia=dao.all()
     assert len(copia)==308
     assert copia[1]==Copia(2,1)
+
+def test_dao_sqlite_catch_all():
+    dao=DAO_SQLite_Director("data/films.sqlite")
+    directores=dao.all()
+    assert len(directores)==76
+    assert directores[7]==Director("Charlie Chaplin",8)
